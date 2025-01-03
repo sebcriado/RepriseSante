@@ -1,5 +1,5 @@
-import { supabase } from '../supabase';
-import { Profile, RetiringProfile, ReplacementProfile } from '../types/profile';
+import { supabase } from "../supabase";
+import { Profile, RetiringProfile, ReplacementProfile } from "../types/profile";
 
 interface SearchFilters {
   city?: string;
@@ -11,24 +11,22 @@ interface SearchFilters {
 }
 
 export async function searchRetiringDoctors(filters: SearchFilters = {}) {
-  let query = supabase
-    .from('retiring_doctors')
-    .select('*');
+  let query = supabase.from("retiring_doctors").select("*");
 
   if (filters.city) {
-    query = query.ilike('city', `%${filters.city}%`);
+    query = query.ilike("city", `%${filters.city}%`);
   }
 
   if (filters.postalCode) {
-    query = query.eq('postal_code', filters.postalCode);
+    query = query.eq("postal_code", filters.postalCode);
   }
 
   if (filters.patientCountMin) {
-    query = query.gte('patient_count', filters.patientCountMin);
+    query = query.gte("patient_count", filters.patientCountMin);
   }
 
   if (filters.patientCountMax) {
-    query = query.lte('patient_count', filters.patientCountMax);
+    query = query.lte("patient_count", filters.patientCountMax);
   }
 
   const { data, error } = await query;
@@ -37,27 +35,37 @@ export async function searchRetiringDoctors(filters: SearchFilters = {}) {
 }
 
 export async function searchReplacementDoctors(filters: SearchFilters = {}) {
-  let query = supabase
-    .from('replacement_doctors')
-    .select('*');
+  let query = supabase.from("replacement_doctors").select("*");
 
   if (filters.city) {
-    query = query.ilike('city', `%${filters.city}%`);
+    query = query.ilike("city", `%${filters.city}%`);
   }
 
   if (filters.postalCode) {
-    query = query.eq('postal_code', filters.postalCode);
+    query = query.eq("postal_code", filters.postalCode);
   }
 
   if (filters.availabilityStart) {
-    query = query.gte('availability_start', filters.availabilityStart);
+    query = query.gte("availability_start", filters.availabilityStart);
   }
 
   if (filters.availabilityEnd) {
-    query = query.lte('availability_end', filters.availabilityEnd);
+    query = query.lte("availability_end", filters.availabilityEnd);
   }
 
   const { data, error } = await query;
+  if (error) throw error;
+  return data as ReplacementProfile[];
+}
+
+export async function searchClosestReplacementDoctors(city: string) {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("profile_type", "replacement")
+    .ilike("city", `%${city}%`)
+    .order("city", { ascending: true });
+
   if (error) throw error;
   return data as ReplacementProfile[];
 }
