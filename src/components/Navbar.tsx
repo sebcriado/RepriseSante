@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { Stethoscope } from 'lucide-react';
-import UserMenu from './UserMenu';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { Stethoscope } from "lucide-react";
+import UserMenu from "./UserMenu";
 
 export default function Navbar() {
   const { user } = useAuth();
@@ -13,9 +13,11 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
             <Stethoscope className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-gray-800">MédConnect</span>
+            <span className="text-xl font-bold text-gray-800">
+              RepriseSanté
+            </span>
           </Link>
-          
+
           <div className="flex items-center space-x-4">
             {user ? (
               <UserMenu />
