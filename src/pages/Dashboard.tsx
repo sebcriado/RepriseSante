@@ -22,7 +22,7 @@ export default function Dashboard() {
 
         if (error) throw error;
 
-        const data = await searchClosestReplacementDoctors(profile.city);
+        const data = await searchClosestReplacementDoctors(profile.city, user.id);
         setDoctors(data);
       } catch (error) {
         console.error("Error fetching doctors:", error);

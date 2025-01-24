@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { ReplacementProfile } from "../../lib/types/profile";
+import { useAuth } from "../../contexts/AuthContext";
+import toast from "react-hot-toast";
+import { fetchProfile } from "../../lib/api/profiles";
 
 interface ReplacementDoctorCardProps {
   doctor: ReplacementProfile;
@@ -8,10 +11,44 @@ interface ReplacementDoctorCardProps {
 export default function ReplacementDoctorCard({
   doctor,
 }: ReplacementDoctorCardProps) {
+  const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleContactClick = () => {
-    setIsModalOpen(true);
+  const handleContactClick = async () => {
+    if (!user) return;
+
+    try {
+      const profile = await fetchProfile(user.id);
+      
+      // Vérifier si le profil est complet
+      if (!profile || !isProfileComplete(profile)) {
+        toast.error("Vous devez compléter votre profil avant de pouvoir contacter un médecin");
+        return;
+      }
+
+      setIsModalOpen(true);
+    } catch (error) {
+      toast.error("Une erreur est survenue");
+      console.error(error);
+    }
+  };
+
+  // Fonction pour vérifier si le profil est complet
+  const isProfileComplete = (profile: ReplacementProfile) => {
+    const requiredFields = [
+      'first_name',
+      'last_name',
+      'city',
+      'postal_code',
+      'registration_number', 
+      'phone',
+      'about'
+    ] as const;
+  
+    return requiredFields.every(field => 
+      profile[field as keyof ReplacementProfile] && 
+      profile[field as keyof ReplacementProfile] && profile[field as keyof ReplacementProfile].toString().trim() !== ''
+    );
   };
 
   const handleCloseModal = () => {
