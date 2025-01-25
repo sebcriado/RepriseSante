@@ -13,6 +13,7 @@ interface BaseProfile {
   about?: string;
   registration_number: string;
   is_verified: boolean;
+  avatar_url?: string;
 }
 
 export interface RetiringProfile extends BaseProfile {

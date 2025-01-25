@@ -3,6 +3,7 @@ import { ReplacementProfile } from "../../lib/types/profile";
 import { useAuth } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
 import { fetchProfile } from "../../lib/api/profiles";
+import { User2 } from "lucide-react";
 
 interface ReplacementDoctorCardProps {
   doctor: ReplacementProfile;
@@ -57,11 +58,17 @@ export default function ReplacementDoctorCard({
 
   return (
     <div className="bg-white shadow-md rounded-lg p-4">
-      <img
-        src={"https://picsum.photos/200"}
-        alt={`${doctor.first_name} ${doctor.last_name}`}
-        className="w-24 h-24 rounded-full mx-auto"
-      />
+      {doctor.avatar_url ? (
+        <img
+          src={doctor.avatar_url}
+          alt={`${doctor.first_name} ${doctor.last_name}`}
+          className="w-24 h-24 rounded-full mx-auto"
+        />
+      ) : (
+        <div className="w-24 h-24 rounded-full bg-gray-200 mx-auto flex items-center justify-center">
+          <User2 className="w-12 h-12 text-gray-500" />
+        </div>
+      )}
       <div className="text-center mt-4">
         <h3 className="text-lg font-bold">{`${doctor.first_name} ${doctor.last_name}`}</h3>
         <p className="text-gray-600">{doctor.city}</p>

@@ -59,9 +59,19 @@ export default function Profile() {
         <div className="p-6">
           <div className="flex justify-between items-start mb-6">
             <div className="flex items-center space-x-4">
-              <div className="bg-gray-100 p-3 rounded-full">
-                <User2 className="h-12 w-12 text-gray-600" />
-              </div>
+                {profile?.avatar_url ? (
+                <div>
+                  <img
+                    src={profile.avatar_url}
+                    alt="User Avatar"
+                    className="w-16 h-16 rounded-full"
+                    />
+                </div>
+                ) : (
+                  <div className="bg-gray-100 p-3 rounded-full">
+                    <User2 className="w-12 h-12 text-gray-500" />
+                  </div>
+                )}
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
                   {profile?.first_name ? `${profile.first_name} ${profile.last_name}` : 'Profil incomplet'}

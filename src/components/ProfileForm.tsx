@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { updateProfile } from '../lib/api/profiles';
 import { Profile } from '../lib/types/profile';
 import toast from 'react-hot-toast';
+import ImageUpload from './profile/ImageUpload';
 
 type ProfileFormData = Omit<Profile, 'id' | 'created_at' | 'updated_at' | 'is_verified'>;
 
@@ -95,6 +96,15 @@ export default function ProfileForm({ initialData, onSuccess }: ProfileFormProps
             <option value="retiring">Médecin partant à la retraite</option>
             <option value="replacement">Médecin remplaçant</option>
           </select>
+        </div>
+
+        <div className="mb-6">
+          <ImageUpload
+            currentImageUrl={formData.avatar_url}
+            onUploadSuccess={(url) => {
+              setFormData(prev => ({ ...prev, avatar_url: url }));
+            }}
+          />
         </div>
 
         <div>
