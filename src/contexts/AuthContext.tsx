@@ -25,7 +25,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await supabase.auth.signOut();
       navigate('/');
-      toast.success('Déconnexion réussie');
     } catch (error) {
       toast.error('Erreur lors de la déconnexion');
     }
