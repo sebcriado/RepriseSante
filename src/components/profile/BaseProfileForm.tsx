@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { updateProfile } from '../../lib/api/profiles';
 import { Profile } from '../../lib/types/profile';
 import toast from 'react-hot-toast';
+import ImageUpload from './ImageUpload';
 
 type BaseProfileData = Omit<Profile, 'id' | 'created_at' | 'updated_at' | 'is_verified'>;
 
@@ -111,6 +112,15 @@ export default function BaseProfileForm({ initialData, onSuccess, additionalFiel
             value={formData.phone}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          />
+        </div>
+
+        <div className="mb-6">
+          <ImageUpload
+            currentImageUrl={formData.avatar_url}
+            onUploadSuccess={(url) => {
+              setFormData(prev => ({ ...prev, avatar_url: url }));
+            }}
           />
         </div>
 

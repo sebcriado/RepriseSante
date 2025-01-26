@@ -58,12 +58,13 @@ export async function searchReplacementDoctors(filters: SearchFilters = {}) {
   return data as ReplacementProfile[];
 }
 
-export async function searchClosestReplacementDoctors(city: string) {
+export async function searchClosestReplacementDoctors(city: string, currentUserId: string) {
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
     .eq("profile_type", "replacement")
     .ilike("city", `%${city}%`)
+    .neq('id', currentUserId) // Exclure l'utilisateur courant
     .order("city", { ascending: true });
 
   if (error) throw error;

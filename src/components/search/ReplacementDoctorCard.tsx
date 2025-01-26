@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { ReplacementProfile } from "../../lib/types/profile";
+import { useAuth } from "../../contexts/AuthContext";
+import toast from "react-hot-toast";
+import { fetchProfile } from "../../lib/api/profiles";
+import { User2 } from "lucide-react";
 
 interface ReplacementDoctorCardProps {
   doctor: ReplacementProfile;
@@ -8,10 +12,44 @@ interface ReplacementDoctorCardProps {
 export default function ReplacementDoctorCard({
   doctor,
 }: ReplacementDoctorCardProps) {
+  const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleContactClick = () => {
-    setIsModalOpen(true);
+  const handleContactClick = async () => {
+    if (!user) return;
+
+    try {
+      const profile = await fetchProfile(user.id);
+      
+      // Vérifier si le profil est complet
+      if (!profile || !isProfileComplete(profile)) {
+        toast.error("Vous devez compléter votre profil avant de pouvoir contacter un médecin");
+        return;
+      }
+
+      setIsModalOpen(true);
+    } catch (error) {
+      toast.error("Une erreur est survenue");
+      console.error(error);
+    }
+  };
+
+  // Fonction pour vérifier si le profil est complet
+  const isProfileComplete = (profile: ReplacementProfile) => {
+    const requiredFields = [
+      'first_name',
+      'last_name',
+      'city',
+      'postal_code',
+      'registration_number', 
+      'phone',
+      'about'
+    ] as const;
+  
+    return requiredFields.every(field => 
+      profile[field as keyof ReplacementProfile] && 
+      profile[field as keyof ReplacementProfile] && profile[field as keyof ReplacementProfile].toString().trim() !== ''
+    );
   };
 
   const handleCloseModal = () => {
@@ -20,11 +58,17 @@ export default function ReplacementDoctorCard({
 
   return (
     <div className="bg-white shadow-md rounded-lg p-4">
-      <img
-        src={"https://picsum.photos/200"}
-        alt={`${doctor.first_name} ${doctor.last_name}`}
-        className="w-24 h-24 rounded-full mx-auto"
-      />
+      {doctor.avatar_url ? (
+        <img
+          src={doctor.avatar_url}
+          alt={`${doctor.first_name} ${doctor.last_name}`}
+          className="w-24 h-24 rounded-full mx-auto"
+        />
+      ) : (
+        <div className="w-24 h-24 rounded-full bg-gray-200 mx-auto flex items-center justify-center">
+          <User2 className="w-12 h-12 text-gray-500" />
+        </div>
+      )}
       <div className="text-center mt-4">
         <h3 className="text-lg font-bold">{`${doctor.first_name} ${doctor.last_name}`}</h3>
         <p className="text-gray-600">{doctor.city}</p>
