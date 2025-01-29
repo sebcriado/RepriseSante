@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserPlus, UserCheck, MapPin } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+import FAQ from "../components/Faq";
 
 export default function Home() {
   const { user } = useAuth();
@@ -55,6 +56,7 @@ export default function Home() {
           </p>
         </div>
       </div>
+      <FAQ />
     </div>
   );
 }
