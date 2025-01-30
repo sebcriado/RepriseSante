@@ -1,26 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import toast from 'react-hot-toast';
 import { ProfileType } from '../lib/types/profile';
+import SpecialtySelect from './registration/SpecialitySelect';
 
 interface AuthFormProps {
   mode: 'login' | 'register';
   profileType?: ProfileType;
 }
 
+interface ValidationErrors {
+  email?: string;
+  password?: string;
+}
+
 export default function AuthForm({ mode, profileType }: AuthFormProps) {
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<ValidationErrors>({});
+  const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password: string): boolean => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{12,}$/;
+    return passwordRegex.test(password);
+  };
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
-
+    const newErrors: ValidationErrors = {};
+    
     const formData = new FormData(e.currentTarget);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
+    
+    if (mode === 'register') {
+      // Validation stricte pour l'inscription
+      if (!validateEmail(email)) {
+        newErrors.email = "Format d'email invalide";
+      }
 
+      if (!validatePassword(password)) {
+        newErrors.password = "Le mot de passe doit contenir au moins 12 caractères, une majuscule, un chiffre et un caractère spécial";
+      }
+    } else {
+      // Validation basique pour le login
+      if (!email) {
+        newErrors.email = "L'email est requis";
+      }
+      if (!password) {
+        newErrors.password = "Le mot de passe est requis";
+      }
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setLoading(true);
     try {
       if (mode === 'login') {
         const { error } = await supabase.auth.signInWithPassword({
@@ -54,6 +98,16 @@ export default function AuthForm({ mode, profileType }: AuthFormProps) {
             ]);
             
           if (profileError) throw profileError;
+
+          // Ajouter les spécialités sélectionnées
+          const { error: specialtiesError } = await supabase
+          .from('doctor_specialties')
+          .insert(selectedSpecialties.map(specialtyId => ({
+            doctor_id: user.id,
+            specialty_id: specialtyId,
+          })));
+
+        if (specialtiesError) throw specialtiesError;
         }
 
         toast.success('Compte créé avec succès ! Vous pouvez maintenant vous connecter.');
@@ -79,6 +133,7 @@ export default function AuthForm({ mode, profileType }: AuthFormProps) {
           required
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
         />
+        {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
       </div>
 
       <div>
@@ -92,7 +147,15 @@ export default function AuthForm({ mode, profileType }: AuthFormProps) {
           required
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
         />
+        {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
       </div>
+
+      {mode === 'register' && (
+        <SpecialtySelect
+          selectedSpecialties={selectedSpecialties}
+          onChange={setSelectedSpecialties}
+        />
+      )}
 
       <button
         type="submit"
