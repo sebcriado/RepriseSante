@@ -14,7 +14,7 @@
   "dependencies": {
     "@babel/preset-env": "^7.26.7",
     "@babel/preset-react": "^7.26.3",
-    "@hotjar/browser": "^1.0.9",
+    "@headlessui/react": "^2.2.0",
     "@stripe/stripe-js": "^5.4.0",
     "@supabase/supabase-js": "^2.39.7",
     "axios": "^1.7.9",
@@ -23,6 +23,7 @@
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.22.2",
+    "react-select": "^5.10.0",
     "uuid": "^11.0.5"
   },
   "devDependencies": {

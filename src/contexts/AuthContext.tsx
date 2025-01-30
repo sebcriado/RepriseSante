@@ -4,13 +4,13 @@ import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   loading: boolean;
   signOut: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({ 
+export const AuthContext = createContext<AuthContextType>({ 
   user: null, 
   loading: true,
   signOut: async () => {},
