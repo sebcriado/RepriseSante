@@ -90,7 +90,7 @@ export default function FAQ() {
               <Disclosure key={itemIdx} as="div" className="mt-4">
                 {({ open }) => (
                   <>
-                    <Disclosure.Button className="flex w-full justify-between rounded-lg bg-blue-100 px-4 py-2 text-left text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75">
+                    <Disclosure.Button className="flex w-full justify-between rounded-lg bg-blue-100 px-4 py-2 text-left text-lg font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75">
                       <span>{item.question}</span>
                       <ChevronUpIcon
                         className={`${
@@ -98,7 +98,7 @@ export default function FAQ() {
                         } h-5 w-5 text-blue-500`}
                       />
                     </Disclosure.Button>
-                    <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                    <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-700 font-bold">
                       {item.answer}
                     </Disclosure.Panel>
                   </>
