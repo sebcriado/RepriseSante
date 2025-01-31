@@ -79,7 +79,7 @@ const faqs = [
 export default function FAQ() {
   return (
     <div className="w-full px-4 pt-16">
-      <h1 className="text-2xl font-bold text-center p-6">
+      <h1 className=" text-4xl font-bold text-center p-6">
         Foire aux questions
       </h1>
       <div className="mx-auto w-full max-w-4xl rounded-2xl bg-white p-8">
