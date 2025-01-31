@@ -20,10 +20,12 @@ export default function ReplacementDoctorCard({
 
     try {
       const profile = await fetchProfile(user.id);
-      
+
       // Vérifier si le profil est complet
       if (!profile || !isProfileComplete(profile)) {
-        toast.error("Vous devez compléter votre profil avant de pouvoir contacter un médecin");
+        toast.error(
+          "Vous devez compléter votre profil avant de pouvoir contacter un médecin"
+        );
         return;
       }
 
@@ -37,18 +39,20 @@ export default function ReplacementDoctorCard({
   // Fonction pour vérifier si le profil est complet
   const isProfileComplete = (profile: ReplacementProfile) => {
     const requiredFields = [
-      'first_name',
-      'last_name',
-      'city',
-      'postal_code',
-      'registration_number', 
-      'phone',
-      'about'
+      "first_name",
+      "last_name",
+      "city",
+      "postal_code",
+      "registration_number",
+      "phone",
+      "about",
     ] as const;
-  
-    return requiredFields.every(field => 
-      profile[field as keyof ReplacementProfile] && 
-      profile[field as keyof ReplacementProfile] && profile[field as keyof ReplacementProfile].toString().trim() !== ''
+
+    return requiredFields.every(
+      (field) =>
+        profile[field as keyof ReplacementProfile] &&
+        profile[field as keyof ReplacementProfile] &&
+        profile[field as keyof ReplacementProfile].toString().trim() !== ""
     );
   };
 
@@ -84,17 +88,19 @@ export default function ReplacementDoctorCard({
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-xl font-bold mb-4">Paiement requis</h2>
             <p className="mb-4">
-              Vous devez payer 5€ pour contacter cette personne.
+              Vous aller être redirigé vers le paiement pour contacter ce
+              médecin. Voulez-vous continuer?
             </p>
-            <div className="flex justify-end space-x-4">
+            <hr />
+            <div className="flex justify-end space-x-4 mt-4">
               <button
                 onClick={handleCloseModal}
                 className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
               >
-                Fermer
+                Annuler
               </button>
               <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-                Payer
+                Oui, continuer
               </button>
             </div>
           </div>
