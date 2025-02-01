@@ -44,7 +44,7 @@ export default function Home() {
           <MapPin className="w-12 h-12 text-blue-600 mx-auto mb-4" />
           <h3 className="text-xl font-semibold mb-2">Recherche Géolocalisée</h3>
           <p className="text-gray-600">
-            Trouvez facilement des opportunités dans votre région
+            Trouvez facilement des opportunités dans votre ville
           </p>
         </div>
         <div className="text-center p-6">

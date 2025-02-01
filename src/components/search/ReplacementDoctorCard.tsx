@@ -51,7 +51,6 @@ export default function ReplacementDoctorCard({
     return requiredFields.every(
       (field) =>
         profile[field as keyof ReplacementProfile] &&
-        profile[field as keyof ReplacementProfile] &&
         profile[field as keyof ReplacementProfile].toString().trim() !== ""
     );
   };
